@@ -1,7 +1,7 @@
-import { NextPage } from "next";
+import { NextPage } from 'next'
 
 const HomePage: NextPage = () => {
-  return <main>Hello World</main>;
-};
+  return <main className="font-bold">Hello World</main>
+}
 
-export default HomePage;
+export default HomePage
