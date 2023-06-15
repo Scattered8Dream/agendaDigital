@@ -1,0 +1,35 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+web-agenda/node_modules
+web-agenda/.pnp
+web-agenda/.pnp.js
+
+# testing
+web-agenda/coverage
+
+# next.js
+web-agenda/.next/
+web-agenda/out/
+
+# production
+web-agenda/build
+
+# misc
+web-agenda/.DS_Store
+web-agenda/*.pem
+
+# debug
+web-agenda/npm-debug.log*
+web-agenda/yarn-debug.log*
+web-agenda/yarn-error.log*
+
+# local env files
+web-agenda/.env*.local
+
+# vercel
+web-agenda/.vercel
+
+# typescript
+web-agenda/*.tsbuildinfo
+web-agenda/next-env.d.ts
