@@ -14,7 +14,7 @@ export const Button: React.FC<ButtonProps> = ({
 }) => {
   return (
     <button
-      className="w-full bg-blue-700 text-neutral-100 font-medium text-lg hover:brightness-110 transition-all p-4"
+      className="w-full bg-blue-700 text-neutral-100 font-medium text-lg hover:brightness-110 rounded transition-all p-4"
       disabled={isLoading}
       {...rest}
     >

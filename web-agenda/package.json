@@ -9,7 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@aldabil/react-scheduler": "^2.7.10",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.11.16",
+    "@mui/material": "^5.13.5",
+    "@mui/x-date-pickers": "^6.7.0",
     "autoprefixer": "^10.4.14",
+    "date-fns": "^2.30.0",
     "next": "13.4.6",
     "postcss": "^8.4.24",
     "react": "18.2.0",

@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { NextRouter } from 'next/router'
 
 import { Input } from '../../../commons/toolkit/Input'
 import { Button } from '../../../commons/toolkit/Button'
@@ -9,7 +10,11 @@ interface IFormData {
   password: string
 }
 
-export const CardForm: React.FC = () => {
+interface CardFormProps {
+  router: NextRouter
+}
+
+export const CardForm: React.FC<CardFormProps> = ({ router }) => {
   const { register, handleSubmit } = useForm<IFormData>()
 
   const [isLoading, setIsLoading] = useState(false)
@@ -19,6 +24,8 @@ export const CardForm: React.FC = () => {
       setIsLoading(true)
 
       console.log({ data })
+
+      router.push('/calendar')
     } catch (handleSingInError) {
       console.log({ handleSingInError })
     } finally {
@@ -31,6 +38,7 @@ export const CardForm: React.FC = () => {
       <h1 className="text-3xl font-bold mb-4">Web Agenda</h1>
 
       <form
+        method="post"
         onSubmit={handleSubmit(handleSignIn)}
         className="w-full flex flex-col"
       >
