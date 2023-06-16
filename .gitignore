@@ -33,3 +33,38 @@ web-agenda/.vercel
 # typescript
 web-agenda/*.tsbuildinfo
 web-agenda/next-env.d.ts
+
+
+# dependencies
+server-agenda/node_modules
+server-agenda/.pnp
+server-agenda/.pnp.js
+
+# testing
+server-agenda/coverage
+
+# next.js
+server-agenda/.next/
+server-agenda/out/
+
+# production
+server-agenda/build
+
+# misc
+server-agenda/.DS_Store
+server-agenda/*.pem
+
+# debug
+server-agenda/npm-debug.log*
+server-agenda/yarn-debug.log*
+server-agenda/yarn-error.log*
+
+# local env files
+server-agenda/.env*.local
+
+# vercel
+server-agenda/.vercel
+
+# typescript
+server-agenda/*.tsbuildinfo
+server-agenda/next-env.d.ts
