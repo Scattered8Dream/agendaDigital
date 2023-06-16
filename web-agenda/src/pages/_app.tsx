@@ -1,8 +1,21 @@
+import React from 'react'
+import { NextPage } from 'next'
 import { AppProps } from 'next/app'
-import '../styles/index.scss'
+import { ToastContainer } from 'react-toastify'
+import 'animate.css'
 
-const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
-  return <Component {...pageProps} />
+import '../styles/index.scss'
+import 'react-toastify/dist/ReactToastify.min.css'
+
+const App: NextPage<AppProps> = ({ Component, pageProps }) => {
+  return (
+    <>
+      <ToastContainer />
+      {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+      {/* @ts-ignore */}
+      <Component {...pageProps} />
+    </>
+  )
 }
 
-export default MyApp
+export default App

@@ -1,33 +1,38 @@
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { NextRouter } from 'next/router'
+import Link from 'next/link'
 
 import { Input } from '../../../commons/toolkit/Input'
 import { Button } from '../../../commons/toolkit/Button'
+import { toast } from 'react-toastify'
 
 interface IFormData {
+  name: string
   email: string
   password: string
 }
 
-interface CardFormProps {
+interface SignUpCardFormProps {
   router: NextRouter
 }
 
-export const CardForm: React.FC<CardFormProps> = ({ router }) => {
+export const SignUpCardForm: React.FC<SignUpCardFormProps> = ({ router }) => {
   const { register, handleSubmit } = useForm<IFormData>()
 
   const [isLoading, setIsLoading] = useState(false)
 
-  const handleSignIn = async (data: IFormData) => {
+  const handleSignUp = async (data: IFormData) => {
     try {
       setIsLoading(true)
 
       console.log({ data })
 
       router.push('/calendar')
-    } catch (handleSingInError) {
-      console.log({ handleSingInError })
+    } catch (handleSignUpError) {
+      console.log({ handleSignUpError })
+
+      toast.error('Ops! Ocorrreu um erro, tente novamente em instantes')
     } finally {
       setIsLoading(false)
     }
@@ -39,26 +44,40 @@ export const CardForm: React.FC<CardFormProps> = ({ router }) => {
 
       <form
         method="post"
-        onSubmit={handleSubmit(handleSignIn)}
-        className="w-full flex flex-col"
+        onSubmit={handleSubmit(handleSignUp)}
+        className="w-full flex flex-col mb-8"
       >
+        <Input
+          label="Nome"
+          type="name"
+          id="name"
+          {...register('name', { required: true })}
+        />
         <Input
           label="E-mail"
           type="email"
           id="email"
-          name="email"
           {...register('email', { required: true })}
         />
         <Input
           label="Senha"
           type="password"
           id="password"
-          name="password"
           {...register('password', { required: true })}
         />
 
-        <Button type="submit" isLoading={isLoading} label="Entrar" />
+        <Button type="submit" isLoading={isLoading} label="Criar conta" />
       </form>
+
+      <p className="text-base">
+        Já possui conta?{' '}
+        <Link
+          href="/"
+          className="text-blue-600 font-medium hover:brightness-110 transition-all"
+        >
+          Acesse já
+        </Link>
+      </p>
     </div>
   )
 }
