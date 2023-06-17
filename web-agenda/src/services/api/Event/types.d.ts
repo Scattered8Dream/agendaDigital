@@ -15,3 +15,13 @@ export interface IEvent {
   createdAt: string
   updatedAt: string
 }
+
+export interface IReqEditEvent {
+  token: string
+  eventId: string
+  events: {
+    title: string
+    start: Date
+    end: Date
+  }
+}

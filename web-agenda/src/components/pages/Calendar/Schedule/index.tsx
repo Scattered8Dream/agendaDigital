@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import { Scheduler } from '@aldabil/react-scheduler'
 import ptBR from 'date-fns/locale/pt-BR'
 import {
@@ -12,44 +12,67 @@ import { v4 as uuidv4 } from 'uuid'
 import { API } from '../../../../services/api'
 
 import { IUser } from '../../../../services/api/Users/types'
-import { IReqCreateEvent } from '../../../../services/api/Event/types'
+import {
+  IEvent,
+  IReqCreateEvent,
+  IReqEditEvent
+} from '../../../../services/api/Event/types'
 
 interface ScheduleProps {
   api: API
   userData: IUser
-  eventsByUser: ProcessedEvent[]
+  eventsByUser: IEvent[]
+  isLoading: boolean
 }
 
 export const Schedule: React.FC<ScheduleProps> = ({
   api,
   userData,
-  eventsByUser
+  eventsByUser,
+  isLoading
 }) => {
   const calendarRef = useRef<SchedulerRef>(null)
 
   useEffect(() => {
-    if (eventsByUser) {
-      calendarRef.current.scheduler.handleState(eventsByUser, 'events')
-    }
-  }, [])
+    calendarRef.current.scheduler.handleState(isLoading, 'loading')
+    calendarRef.current.scheduler.handleState(
+      eventsByUser.map(event => ({
+        ...event.events,
+        start: new Date(event.events.start),
+        end: new Date(event.events.end)
+      })),
+      'events'
+    )
+  }, [isLoading, eventsByUser])
 
-  console.log(calendarRef.current)
+  const handleConfirm = useCallback(
+    async (event: ProcessedEvent, action: EventActions) => {
+      if (action === 'create') {
+        await createEvent({
+          end: event.end,
+          event_id: uuidv4(),
+          start: event.start,
+          title: event.title,
+          token: userData.token
+        })
 
-  const handleConfirm = async (event: ProcessedEvent, action: EventActions) => {
-    if (action === 'create') {
-      await createEvent({
-        end: event.end,
-        event_id: uuidv4(),
-        start: event.start,
-        title: event.title,
-        token: userData?.token
-      })
+        return event
+      } else if (action === 'edit') {
+        await editEvent({
+          eventId: String(event.event_id),
+          events: {
+            end: event.end,
+            start: event.start,
+            title: event.title
+          },
+          token: userData.token
+        })
 
-      return event
-    } else if (action === 'edit') {
-      return event
-    }
-  }
+        return event
+      }
+    },
+    [userData]
+  )
 
   const createEvent = async (requestData: IReqCreateEvent) => {
     try {
@@ -61,17 +84,47 @@ export const Schedule: React.FC<ScheduleProps> = ({
     }
   }
 
+  const editEvent = async (requestData: IReqEditEvent) => {
+    try {
+      await api.events.editEvent(requestData)
+    } catch (editEventError) {
+      console.log({ editEventError })
+
+      toast.error('Ops! Ocorreu um erro ao editar o evento')
+    }
+  }
+
+  const deleteEvent = useCallback(
+    async (eventId: string) => {
+      try {
+        await api.events.deleteEvent(eventId, userData.token)
+      } catch (deleteEventError) {
+        console.log({ deleteEventError })
+
+        toast.error('Ops! Ocorreu um erro ao deletar o evento')
+      }
+    },
+    [userData]
+  )
+
   return (
     <div className="w-full max-w-7xl w-full items-center justify-center p-12 lg:p-20 ">
       <h1 className="text-3xl font-bold mb-4">Agenda Pessoal</h1>
 
       <Scheduler
-        ref={calendarRef}
         hourFormat="24"
+        ref={calendarRef}
         locale={ptBR}
-        events={eventsByUser}
-        editable={false}
+        events={eventsByUser.map(event => ({
+          ...event.events,
+          start: new Date(event.events.start),
+          end: new Date(event.events.end)
+        }))}
+        onDelete={deleteEvent}
+        loading={isLoading}
+        deletable={false}
         draggable={false}
+        editable={false}
         onConfirm={handleConfirm}
         translations={{
           navigation: {

@@ -1,6 +1,6 @@
 import { AxiosInstance } from 'axios'
 
-import { IEvent, IReqCreateEvent } from './types'
+import { IEvent, IReqCreateEvent, IReqEditEvent } from './types'
 
 export class Events {
   private instance: AxiosInstance
@@ -30,6 +30,30 @@ export class Events {
         }
       }
     )
+  }
+
+  public async editEvent({ eventId, events, token }: IReqEditEvent) {
+    const { data } = await this.instance.put(
+      `/events/${eventId}`,
+      { events },
+      {
+        headers: {
+          authorization: `Bearer ${token}`
+        }
+      }
+    )
+
+    return data
+  }
+
+  public async deleteEvent(eventId: string, token: string) {
+    const { data } = await this.instance.delete(`/events/${eventId}`, {
+      headers: {
+        authorization: `Bearer ${token}`
+      }
+    })
+
+    return data
   }
 
   public async getEventsByUser(token: string): Promise<IEvent[]> {
