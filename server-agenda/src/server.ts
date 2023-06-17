@@ -1,10 +1,12 @@
 import express, { NextFunction, Request, Response } from "express";
+import "express-async-errors";
 
 import AppError from "./errors/AppError";
 
 import UsersRouter from "./routes/user.routes";
 
 const app = express();
+app.use(express.json());
 
 app.use((err: Error, _: Request, response: Response, __: NextFunction) => {
   if (err instanceof AppError) {
@@ -20,7 +22,6 @@ app.use((err: Error, _: Request, response: Response, __: NextFunction) => {
     .json({ status: "Error", message: "Internal server error" });
 });
 
-app.use(express.json());
 app.use("/user", UsersRouter);
 
 app.listen(3333, () => {

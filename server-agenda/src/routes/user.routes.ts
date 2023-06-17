@@ -18,4 +18,15 @@ UsersRouter.post("/", async (request, response) => {
   return response.json(createUserService);
 });
 
+UsersRouter.post("/session", async (request, response) => {
+  const { email, password } = request.body;
+
+  const sessionService = await userController.session({
+    email,
+    password,
+  });
+
+  return response.json(sessionService);
+});
+
 export default UsersRouter;
