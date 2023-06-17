@@ -1,11 +1,13 @@
 import axios, { AxiosInstance } from 'axios'
 
 import { Users } from './Users'
+import { Events } from './Event'
 
 export class API {
   private instance: AxiosInstance
 
   users: Users
+  events: Events
 
   constructor() {
     this.instance = axios.create({
@@ -16,6 +18,7 @@ export class API {
     })
 
     this.users = new Users(this.instance)
+    this.events = new Events(this.instance)
   }
 }
 
