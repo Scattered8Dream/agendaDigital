@@ -1,11 +1,14 @@
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { NextRouter } from 'next/router'
+import { toast } from 'react-toastify'
 import Link from 'next/link'
 
 import { Input } from '../../../commons/toolkit/Input'
 import { Button } from '../../../commons/toolkit/Button'
-import { toast } from 'react-toastify'
+
+import { API } from '../../../../services/api'
+import { IUser } from '../../../../services/api/Users/types'
 
 interface IFormData {
   name: string
@@ -15,9 +18,15 @@ interface IFormData {
 
 interface SignUpCardFormProps {
   router: NextRouter
+  api: API
+  setUserData(userData: IUser): void
 }
 
-export const SignUpCardForm: React.FC<SignUpCardFormProps> = ({ router }) => {
+export const SignUpCardForm: React.FC<SignUpCardFormProps> = ({
+  router,
+  setUserData,
+  api
+}) => {
   const { register, handleSubmit } = useForm<IFormData>()
 
   const [isLoading, setIsLoading] = useState(false)
@@ -26,7 +35,9 @@ export const SignUpCardForm: React.FC<SignUpCardFormProps> = ({ router }) => {
     try {
       setIsLoading(true)
 
-      console.log({ data })
+      const responseData = await api.users.createUser(data)
+
+      setUserData(responseData)
 
       router.push('/calendar')
     } catch (handleSignUpError) {
