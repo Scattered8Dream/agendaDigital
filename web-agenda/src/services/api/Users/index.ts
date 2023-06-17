@@ -1,6 +1,6 @@
 import { AxiosInstance } from 'axios'
 
-import { IReqCreateUser, IUser } from './types'
+import { IReqCreateUser, IReqSession, IUser } from './types'
 
 export class Users {
   private instance: AxiosInstance
@@ -17,6 +17,15 @@ export class Users {
     const { data } = await this.instance.post('/user', {
       email,
       name,
+      password
+    })
+
+    return data
+  }
+
+  public async session({ email, password }: IReqSession): Promise<IUser> {
+    const { data } = await this.instance.post('/user/session', {
+      email,
       password
     })
 
