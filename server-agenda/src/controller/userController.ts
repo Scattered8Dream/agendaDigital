@@ -36,7 +36,20 @@ class UserController {
         })
         .returning(["userId", "name", "email", "createdAt"]);
 
-      return createdUser[0];
+      const { secret, expiresIn } = authConfig.jwt;
+
+      const token = sign({}, secret, {
+        subject: createdUser[0].userId,
+        expiresIn,
+      });
+
+      return {
+        userId: createdUser[0].userId,
+        name: createdUser[0].name,
+        email: createdUser[0].email,
+        createdAt: createdUser[0].createdAt,
+        token,
+      };
     } catch (createUserError) {
       console.error({ createUserError });
 
