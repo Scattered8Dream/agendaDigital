@@ -25,7 +25,7 @@ class EventController {
     try {
       const { event_id, title, start, end, userId } = requestData;
 
-      const eventId = uuidv4();
+      const eventId = event_id;
       const createdAt = new Date().toISOString();
       const updatedAt = new Date().toISOString();
 
@@ -44,6 +44,24 @@ class EventController {
       console.error({ createEventError });
 
       throw new AppError("Error when creating event", 500);
+    }
+  }
+
+  public async deleteEvent(eventId: string) {
+    try {
+      const deletedEvent = await KnexConnection("events")
+        .where({ eventId })
+        .del();
+
+      if (deletedEvent === 0) {
+        throw new AppError("Event not found", 404);
+      }
+
+      return { eventId };
+    } catch (deleteEventError) {
+      console.error({ deleteEventError });
+
+      throw new AppError("Error when deleting event", 500);
     }
   }
 

@@ -37,6 +37,18 @@ CalendarRouter.put(
   }
 );
 
+CalendarRouter.delete(
+  "/:eventId",
+  ensureAuthenticated,
+  async (request, response) => {
+    const { eventId } = request.params;
+
+    await eventController.deleteEvent(eventId);
+
+    return response.json({});
+  }
+);
+
 CalendarRouter.get("/", ensureAuthenticated, async (request, response) => {
   const userId = request.user.userId;
 
